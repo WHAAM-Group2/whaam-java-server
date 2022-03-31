@@ -15,7 +15,7 @@ public class App {
     public static void main(String[] args) {
         
         String connectionString = "mongodb://localhost:27017";
-        MongoClient mongoClient = MongoClients.create("mongodb+srv://whaam:B-oop123@project2022.yskak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+        MongoClient mongoClient = MongoClients.create("INSERT LINK HERE");
         MongoCollection<Document> collection = mongoClient.getDatabase("configuration").getCollection("setup");
 
         Document doc = collection.find(
