@@ -53,18 +53,26 @@ public class TestClient {
                         win = dis.readBoolean();  
                         
                     }*/
+
+                    //read a value (true/false) sent by the Arduino-Server
+                    //true = the price object is not on the sensor
+                    //false = the price object is on the sensor
                     win = dis.readBoolean();
                     
+                    //get the music value from the "music simulator"
                     if(musicSimulator.isMusic()){
+                        //if true, = music is playing, set message to "a"  
                         setMessageToArduino("a");
                     }
                     else{
+                        //else, = music is not playing, set message to "b" 
                         setMessageToArduino("b");
                     }
                     
-                  
+                    //send message to Arduino-Server
                     dos.write(getMessageToArduino().getBytes());
                     dos.flush();
+
                     System.out.println(messageToArduino);
                     //System.out.println(musicSimulator.isMusic());
                 }

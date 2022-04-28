@@ -10,10 +10,11 @@ public class MusicSimulator extends Thread{
     @Override
     public void run() {
         try {
+            //changes the value of a boolean every 4 seconds
+            //to simulate music playing/pausing, true resp. false
             while(true) {
-               TimeUnit.SECONDS.sleep(2);
+                TimeUnit.SECONDS.sleep(2);
                 setMusic(!music);
-                
                 TimeUnit.SECONDS.sleep(2);
                 
                 //System.out.println(music);
