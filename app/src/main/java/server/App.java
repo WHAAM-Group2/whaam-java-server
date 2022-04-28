@@ -9,6 +9,8 @@ import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.eq;
 
 import org.bson.Document;
+//for communicatiing with the embedded system
+//import arduino.*;
 
 public class App {
     

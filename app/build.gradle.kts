@@ -14,6 +14,7 @@ plugins {
 repositories {
     // Use Maven Central for resolving dependencies.
     mavenCentral()
+
 }
 
 dependencies {
@@ -23,11 +24,16 @@ dependencies {
     // This dependency is used by the application.
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("org.mongodb:mongodb-driver-sync:4.1.2")
+
+    //embedded system jar-files
+    
+    //implementation(files("/Users/malinramkull/Desktop/jarfiles/arduino.jar"))
+    //implementation(files("/Users/malinramkull/Desktop/jarfiles/jSerialComm-1.3.11.jar"))
 }
 
 application {
     // Define the main class for the application.
-    mainClass.set("server.App")
+    mainClass.set("main.TestClient")
 }
 
 tasks.named<Test>("test") {
