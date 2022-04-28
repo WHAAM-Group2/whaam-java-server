@@ -3,27 +3,23 @@
  */
 package server;
 
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import static com.mongodb.client.model.Filters.eq;
+import java.io.IOException;
 
-import org.bson.Document;
+import server.misc.ShortcutFunctions;
 
 public class App {
-    
-    public static void main(String[] args) {
-        
-        String connectionString = "LINK HERE";
 
-        MongoClient mongoClient = MongoClients.create(connectionString);
-        MongoCollection<Document> collection = mongoClient.getDatabase("configuration").getCollection("setup");
+    public static void main(String[] args) throws InterruptedException {
 
-        Document doc = collection.find(
-            eq("name", "setup")
-        ).first();
+        try {
 
-        System.out.println(doc.toJson());
+            ShortcutFunctions.initializeOpencv();
+
+            
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
