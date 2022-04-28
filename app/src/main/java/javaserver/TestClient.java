@@ -8,23 +8,28 @@ import java.net.Socket;
 public class TestClient {
     private int port = 1337;
     private String ipArduino = "192.168.0.12";
-    private DataOutputStream dos;
     private DataInputStream dis;
-    private byte messageFromArduino;
-    private String ledOn = "a";
-
+    private DataOutputStream dos;
+    private boolean win = false;
+    private boolean music = false;
+    private MusicSimulator musicSimulator;
+    private String messageToArduino;
+    private boolean copy;
 
 
     public TestClient() throws IOException {
+        System.out.println("started");
+        musicSimulator = new MusicSimulator();
         connectToArduino();
+        //System.out.println("started");
+
     }
 
     public void connectToArduino() throws IOException {
-
             Socket socket = new Socket(ipArduino, port);
-            System.out.println("new game started");
-            dos = new DataOutputStream(socket.getOutputStream());
+            System.out.println("gamehandler started");
             dis = new DataInputStream(socket.getInputStream());
+            dos = new DataOutputStream(socket.getOutputStream());
             new ArduinoHandler();
 
     }
@@ -41,27 +46,47 @@ public class TestClient {
         @Override
         public void run() {
             try {
-                while(!interrupted()) {
-                    messageFromArduino = dis.readByte();
-                    System.out.println("arduino-server called victory");
-
-                    if(messageFromArduino == 71){
-                        System.out.println("YOU WON!");
-                        dos.write(ledOn.getBytes());
-                        dos.flush();
-                        currentThread().interrupt();
+                while(true) {
+                 
+                   
+                    /*if(dis.available() > 0){
+                        win = dis.readBoolean();  
+                        
+                    }*/
+                    win = dis.readBoolean();
+                    
+                    if(musicSimulator.isMusic()){
+                        setMessageToArduino("a");
                     }
+                    else{
+                        setMessageToArduino("b");
+                    }
+                    
+                  
+                    dos.write(getMessageToArduino().getBytes());
+                    dos.flush();
+                    System.out.println(messageToArduino);
+                    //System.out.println(musicSimulator.isMusic());
                 }
-            } catch (IOException e) {
+            } catch (NullPointerException | IOException e) {
                 e.printStackTrace();
             }
         }
     }
 
+
     public static void main(String[] args) throws IOException {
         new TestClient();
-
     }
+
+    public String getMessageToArduino() {
+        return messageToArduino;
+    }
+
+    public void setMessageToArduino(String messageToArduino) {
+        this.messageToArduino = messageToArduino;
+    }
+
 
 }
 
