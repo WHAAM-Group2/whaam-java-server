@@ -5,6 +5,14 @@ package server;
 
 import java.io.IOException;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.changestream.FullDocument;
+
+import org.bson.Document;
+
 import server.misc.ShortcutFunctions;
 
 public class App {
@@ -15,7 +23,16 @@ public class App {
 
             ShortcutFunctions.initializeOpencv();
 
-            
+            MongoClient mongoClient = MongoClients.create(
+                    "mongodb+srv://whaam:B-oop123@project2022.yskak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+
+            System.out.println("Connected to MongoDB");
+
+            MongoDatabase database = mongoClient.getDatabase("configuration");
+            MongoCollection<Document> collection = database.getCollection("setup");
+
+            var watchCursor = collection.watch()
+                    .fullDocument(FullDocument.UPDATE_LOOKUP);
 
         } catch (IOException e) {
             e.printStackTrace();
