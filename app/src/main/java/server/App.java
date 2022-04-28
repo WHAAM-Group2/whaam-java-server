@@ -3,17 +3,9 @@
  */
 package server;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.changestream.FullDocument;
-
-import org.bson.Document;
 
 import server.controller.GameController;
 import server.controller.MongoController;

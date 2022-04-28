@@ -1,16 +1,11 @@
 package server.model;
 
 import java.util.Date;
-import java.util.List;
 
-import org.opencv.core.Mat;
-import org.opencv.core.Rect;
-import org.opencv.highgui.HighGui;
-import org.opencv.videoio.VideoCapture;
+import com.google.common.base.Stopwatch;
 
 import server.controller.GameController;
-import server.model.motion.DeepNeuralNetworkProcessor;
-import server.model.motion.DnnObject;
+
 import server.model.motion.Person;
 
 public class Game {
@@ -19,12 +14,15 @@ public class Game {
     private long endTime;
     private double score;
     private GameController gameController;
+    private Stopwatch stopwatch;
 
     private int mistakesCount;
 
     public Game(GameController gameController) {
 
         this.gameController = gameController;
+        this.stopwatch = Stopwatch.createUnstarted();
+
         startGame();
 
     }
@@ -36,11 +34,46 @@ public class Game {
         mistakesCount = 0;
 
         Person player = new Person("Wael");
+        boolean danger = false;
+        int count = 0;
 
         while (true) {
 
+            if (count > 3) {
+                gameController.endGame();
+            }
+
             gameController.updatePlayer(player);
             player.showGauge();
+
+            if (player.getLerpPercent() > 5) {
+
+                if (!danger) {
+
+                    danger = true;
+                    stopwatch.reset();
+                    stopwatch.start();
+
+                }
+
+            } else {
+
+                if (danger) {
+
+                    danger = false;
+
+                    stopwatch.stop();
+                    double time = stopwatch.elapsed().toMillis();
+
+                    System.out.println(
+                        String.format("Player was in danger for: %.2f seconds", time / 1000.0)
+                    );
+
+                    count++;
+
+                }
+
+            }
 
         }
 

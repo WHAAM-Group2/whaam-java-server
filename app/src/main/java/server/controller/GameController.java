@@ -19,6 +19,7 @@ public class GameController implements PropertyChangeListener {
     private MongoController mongo;
     private DeepNeuralNetworkProcessor processor;
     private VideoCapture camera;
+    private Game game;
 
     public GameController(MongoController mongo) {
 
@@ -39,7 +40,7 @@ public class GameController implements PropertyChangeListener {
 
             System.out.println("Starting a game...");
 
-            new Game(this);
+            game = new Game(this);
 
         } else {
 
@@ -69,6 +70,12 @@ public class GameController implements PropertyChangeListener {
             e.printStackTrace();
         }
 
+    }
+
+    public void endGame() {
+        game.endGame();
+        mongo.endGame();
+        game = null;
     }
 
 }

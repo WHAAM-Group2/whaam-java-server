@@ -17,6 +17,7 @@ public class ShortcutFunctions {
         BufferedReader br = new BufferedReader(fr); // creates a buffering character input stream
 
         System.load(br.readLine());
+        br.close();
     }
 
 }

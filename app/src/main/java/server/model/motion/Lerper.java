@@ -58,8 +58,6 @@ public class Lerper {
             resting = false;
         }
 
-        System.out.println(v);
-
         return position;
 
     }
