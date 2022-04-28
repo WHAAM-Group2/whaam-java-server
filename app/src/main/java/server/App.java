@@ -17,14 +17,15 @@ import server.misc.ShortcutFunctions;
 
 public class App {
 
-    public static void main(String[] args) throws InterruptedException {
+    MongoClient mongoClient;
+
+    public static void main(String[] args) {
 
         try {
 
             ShortcutFunctions.initializeOpencv();
 
-            MongoClient mongoClient = MongoClients.create(
-                    "mongodb+srv://whaam:B-oop123@project2022.yskak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority");
+            MongoClient mongoClient = MongoClients.create(args[0]);
 
             System.out.println("Connected to MongoDB");
 
