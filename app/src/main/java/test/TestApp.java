@@ -10,6 +10,8 @@ public class TestApp {
             "mongodb+srv://whaam:B-oop123@project2022.yskak.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
         });
 
+        // App.main(new String[] {});
+
     }
 
 }

@@ -24,6 +24,7 @@ dependencies {
     // This dependency is used by the application.
     implementation("com.google.guava:guava:30.1.1-jre")
     implementation("org.mongodb:mongodb-driver-sync:4.1.2")
+    implementation(files("C:/Users/Wael/Downloads/opencv/build/java/opencv-455.jar"))
 
     //embedded system jar-files
     
@@ -33,7 +34,7 @@ dependencies {
 
 application {
     // Define the main class for the application.
-    mainClass.set("main.TestClient")
+    mainClass.set("test.TestApp")
 }
 
 tasks.named<Test>("test") {

@@ -3,6 +3,8 @@
  */
 package server;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 import com.mongodb.client.MongoClient;
@@ -13,6 +15,8 @@ import com.mongodb.client.model.changestream.FullDocument;
 
 import org.bson.Document;
 
+import server.controller.GameController;
+import server.controller.MongoController;
 import server.misc.ShortcutFunctions;
 
 public class App {
@@ -25,15 +29,8 @@ public class App {
 
             ShortcutFunctions.initializeOpencv();
 
-            MongoClient mongoClient = MongoClients.create(args[0]);
-
-            System.out.println("Connected to MongoDB");
-
-            MongoDatabase database = mongoClient.getDatabase("configuration");
-            MongoCollection<Document> collection = database.getCollection("setup");
-
-            var watchCursor = collection.watch()
-                    .fullDocument(FullDocument.UPDATE_LOOKUP);
+            MongoController mongo = new MongoController(args.length > 0 ? args[0] : "localhost");
+            new GameController(mongo);
 
         } catch (IOException e) {
             e.printStackTrace();
