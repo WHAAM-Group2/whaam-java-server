@@ -10,31 +10,29 @@ public class TestClient {
     private String ipArduino = "192.168.0.12";
     private DataInputStream dis;
     private DataOutputStream dos;
-    private boolean win = false;
-    private boolean music = false;
+    private boolean win;
+    private boolean music;
     private MusicSimulator musicSimulator;
     private String messageToArduino;
-    private boolean copy;
+    private byte messageFromArduino;
+    
 
 
     public TestClient() throws IOException {
-        System.out.println("started");
+        System.out.println("Started");
         musicSimulator = new MusicSimulator();
         connectToArduino();
-        //System.out.println("started");
 
     }
 
     public void connectToArduino() throws IOException {
             Socket socket = new Socket(ipArduino, port);
-            System.out.println("gamehandler started");
+            System.out.println("Gamehandler started");
             dis = new DataInputStream(socket.getInputStream());
             dos = new DataOutputStream(socket.getOutputStream());
             new ArduinoHandler();
+            //new MessageReceiver();
 
-    }
-
-    public void run(){ // java serverns tråd
     }
 
     private class ArduinoHandler extends Thread{
@@ -47,24 +45,24 @@ public class TestClient {
         public void run() {
             try {
                 while(true) {
-                 
-                   
-                    /*if(dis.available() > 0){
-                        win = dis.readBoolean();  
-                        
-                    }*/
+                    messageFromArduino = dis.readByte();
+                    //87 = W 
+                    if(messageFromArduino == 87){
+                        setWin(true);
+                    }
+                    //76 = L 
+                    if(messageFromArduino == 76){
+                        setWin(false);
+                    }
+                        System.out.println("message received:" + win);
 
-                    //read a value (true/false) sent by the Arduino-Server
-                    //true = the price object is not on the sensor
-                    //false = the price object is on the sensor
-                    win = dis.readBoolean();
-                    
+                    music = musicSimulator.isMusic();
                     //get the music value from the "music simulator"
-                    if(musicSimulator.isMusic()){
+                    if(music){
                         //if true, = music is playing, set message to "a"  
                         setMessageToArduino("a");
                     }
-                    else{
+                    if(!music){
                         //else, = music is not playing, set message to "b" 
                         setMessageToArduino("b");
                     }
@@ -73,7 +71,7 @@ public class TestClient {
                     dos.write(getMessageToArduino().getBytes());
                     dos.flush();
 
-                    System.out.println(messageToArduino);
+                    System.out.println("message sent:" + messageToArduino);
                     //System.out.println(musicSimulator.isMusic());
                 }
             } catch (NullPointerException | IOException e) {
@@ -82,9 +80,19 @@ public class TestClient {
         }
     }
 
+    
+
 
     public static void main(String[] args) throws IOException {
         new TestClient();
+    }
+
+    public boolean isWin() {
+        return win;
+    }
+
+    public void setWin(boolean win) {
+        this.win = win;
     }
 
     public String getMessageToArduino() {

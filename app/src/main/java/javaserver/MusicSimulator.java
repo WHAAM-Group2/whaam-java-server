@@ -3,7 +3,7 @@ package javaserver;
 import java.util.concurrent.TimeUnit;
 
 public class MusicSimulator extends Thread{
-    private boolean music = true;
+    private boolean music = false;
     public MusicSimulator(){
         start();
     }
@@ -16,8 +16,6 @@ public class MusicSimulator extends Thread{
                 TimeUnit.SECONDS.sleep(2);
                 setMusic(!music);
                 TimeUnit.SECONDS.sleep(2);
-                
-                //System.out.println(music);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -29,6 +27,7 @@ public class MusicSimulator extends Thread{
     public void setMusic(boolean music) {
         this.music = music;
     }
+
 
   
    
