@@ -1,5 +1,6 @@
 package javaserver;
 
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class MusicSimulator extends Thread{
@@ -9,13 +10,14 @@ public class MusicSimulator extends Thread{
     }
     @Override
     public void run() {
+        // Scanner in = new Scanner(System.in);
+
         try {
             //changes the value of a boolean every 4 seconds
             //to simulate music playing/pausing, true resp. false
-            while(true) {
-                TimeUnit.SECONDS.sleep(2);
+            while(!interrupted()) {
+                // String yay = in.nextLine();
                 setMusic(!music);
-                TimeUnit.SECONDS.sleep(2);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -27,10 +29,5 @@ public class MusicSimulator extends Thread{
     public void setMusic(boolean music) {
         this.music = music;
     }
-
-
-  
-   
-    
 
 }

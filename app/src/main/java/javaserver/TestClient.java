@@ -5,6 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
+import server.controller.GameController;
+import server.model.MusicSimulator;
+
 public class TestClient {
     private int port = 1337;
     private String ipArduino = "192.168.0.12";
@@ -15,64 +18,71 @@ public class TestClient {
     private MusicSimulator musicSimulator;
     private String messageToArduino;
     private byte messageFromArduino;
-    
+    private GameController controller;
 
-
-    public TestClient() throws IOException {
-        System.out.println("Started");
-        musicSimulator = new MusicSimulator();
+    public TestClient(GameController controller) throws IOException {
+        System.out.println("Started Arduino Client");
+        this.controller = controller;
+        // musicSimulator = new MusicSimulator();
+        // musicSimulator = new MusicSimulator();
         connectToArduino();
 
     }
 
     public void connectToArduino() throws IOException {
-            Socket socket = new Socket(ipArduino, port);
-            System.out.println("Gamehandler started");
-            dis = new DataInputStream(socket.getInputStream());
-            dos = new DataOutputStream(socket.getOutputStream());
-            new ArduinoHandler();
-            //new MessageReceiver();
+        Socket socket = new Socket(ipArduino, port);
+        System.out.println("Gamehandler started");
+        dis = new DataInputStream(socket.getInputStream());
+        dos = new DataOutputStream(socket.getOutputStream());
+        new ArduinoHandler();
+        // new MessageReceiver();
 
     }
 
-    private class ArduinoHandler extends Thread{
+    private class ArduinoHandler extends Thread {
 
-        public ArduinoHandler(){
+        public ArduinoHandler() {
             start();
         }
 
         @Override
         public void run() {
             try {
-                while(true) {
+                while (true) {
                     messageFromArduino = dis.readByte();
-                    //87 = W 
-                    if(messageFromArduino == 87){
+                    // 87 = W
+                    if (messageFromArduino == 87) {
                         setWin(true);
                     }
-                    //76 = L 
-                    if(messageFromArduino == 76){
+                    // 76 = L
+                    if (messageFromArduino == 76) {
                         setWin(false);
                     }
-                        System.out.println("message received:" + win);
+                    // if (messageFromArduino == 67) {
+                    //     System.out.println("C");
+                    // }
+                    System.out.println("message received:" + win);
 
-                    music = musicSimulator.isMusic();
-                    //get the music value from the "music simulator"
-                    if(music){
-                        //if true, = music is playing, set message to "a"  
+                    // music = musicSimulator.isMusic();
+                    // music = musicSimulator.getMp().getRunningStatus();
+                    music = controller.getMusicStatus();
+
+                    // get the music value from the "music simulator"
+                    if (music) {
+                        // if true, = music is playing, set message to "a"
                         setMessageToArduino("a");
                     }
-                    if(!music){
-                        //else, = music is not playing, set message to "b" 
+                    if (!music) {
+                        // else, = music is not playing, set message to "b"
                         setMessageToArduino("b");
                     }
-                    
-                    //send message to Arduino-Server
+
+                    // send message to Arduino-Server
                     dos.write(getMessageToArduino().getBytes());
                     dos.flush();
 
-                    System.out.println("message sent:" + messageToArduino);
-                    //System.out.println(musicSimulator.isMusic());
+                    // System.out.println("message sent:" + messageToArduino);
+                    // System.out.println(musicSimulator.isMusic());
                 }
             } catch (NullPointerException | IOException e) {
                 e.printStackTrace();
@@ -80,12 +90,9 @@ public class TestClient {
         }
     }
 
-    
-
-
-    public static void main(String[] args) throws IOException {
-        new TestClient();
-    }
+    // public static void main(String[] args) throws IOException {
+    // new TestClient();
+    // }
 
     public boolean isWin() {
         return win;
@@ -103,6 +110,76 @@ public class TestClient {
         this.messageToArduino = messageToArduino;
     }
 
+    public int getPort() {
+        return this.port;
+    }
+
+    public void setPort(int port) {
+        this.port = port;
+    }
+
+    public String getIpArduino() {
+        return this.ipArduino;
+    }
+
+    public void setIpArduino(String ipArduino) {
+        this.ipArduino = ipArduino;
+    }
+
+    public DataInputStream getDis() {
+        return this.dis;
+    }
+
+    public void setDis(DataInputStream dis) {
+        this.dis = dis;
+    }
+
+    public DataOutputStream getDos() {
+        return this.dos;
+    }
+
+    public void setDos(DataOutputStream dos) {
+        this.dos = dos;
+    }
+
+    public boolean getWin() {
+        return this.win;
+    }
+
+    public boolean isMusic() {
+        return this.music;
+    }
+
+    public boolean getMusic() {
+        return this.music;
+    }
+
+    public void setMusic(boolean music) {
+        this.music = music;
+    }
+
+    public MusicSimulator getMusicSimulator() {
+        return this.musicSimulator;
+    }
+
+    public void setMusicSimulator(MusicSimulator musicSimulator) {
+        this.musicSimulator = musicSimulator;
+    }
+
+    public byte getMessageFromArduino() {
+        return this.messageFromArduino;
+    }
+
+    public void setMessageFromArduino(byte messageFromArduino) {
+        this.messageFromArduino = messageFromArduino;
+    }
+
+    public GameController getController() {
+        return this.controller;
+    }
+
+    public void setController(GameController controller) {
+        this.controller = controller;
+    }
 
 }
-

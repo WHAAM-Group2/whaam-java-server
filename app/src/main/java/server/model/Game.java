@@ -37,42 +37,36 @@ public class Game {
         boolean danger = false;
         int count = 0;
 
-        while (true) {
+        stopwatch.start();
 
-            if (count > 3) {
-                gameController.endGame();
-            }
+        while (true) {
 
             gameController.updatePlayer(player);
             player.showGauge();
 
-            if (player.getLerpPercent() > 5) {
+            // if (stopwatch.elapsed().toSeconds() > 5) {
 
-                if (!danger) {
+            //     gameController.endGame();
+            //     break;
 
-                    danger = true;
-                    stopwatch.reset();
-                    stopwatch.start();
+            // }
+
+            if (!gameController.getArduino().getWin()) {
+                
+                if (!gameController.getMusic().getMp().getRunningStatus()) {
+                    
+                    if (player.getLerpPercent() > 10) {
+                        gameController.endGame(0, Status.LOSS);
+                        break;
+                    }
 
                 }
 
             } else {
 
-                if (danger) {
-
-                    danger = false;
-
-                    stopwatch.stop();
-                    double time = stopwatch.elapsed().toMillis();
-
-                    System.out.println(
-                        String.format("Player was in danger for: %.2f seconds", time / 1000.0)
-                    );
-
-                    count++;
-
-                }
-
+                gameController.endGame(stopwatch.elapsed().toSeconds(), Status.WIN);
+                System.out.println("Game ended.");
+                break;
             }
 
         }

@@ -21,7 +21,7 @@ public class App {
 
             ShortcutFunctions.initializeOpencv();
 
-            MongoController mongo = new MongoController(args.length > 0 ? args[0] : "localhost");
+            MongoController mongo = new MongoController(args.length > 0 ? args[0] : "mongodb://localhost:27017");
             new GameController(mongo);
 
         } catch (IOException e) {
