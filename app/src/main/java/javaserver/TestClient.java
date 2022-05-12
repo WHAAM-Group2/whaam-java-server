@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.Socket;
 
 import server.controller.GameController;
-import server.model.MusicSimulator;
 
 public class TestClient {
     private int port = 1337;
@@ -49,6 +48,11 @@ public class TestClient {
         public void run() {
             try {
                 while (true) {
+
+                    // if (!controller.getGameStatus()) {
+                    // continue;
+                    // }
+
                     messageFromArduino = dis.readByte();
                     // 87 = W
                     if (messageFromArduino == 87) {
@@ -59,27 +63,34 @@ public class TestClient {
                         setWin(false);
                     }
                     // if (messageFromArduino == 67) {
-                    //     System.out.println("C");
+                    // System.out.println("C");
                     // }
                     System.out.println("message received:" + win);
 
                     // music = musicSimulator.isMusic();
                     // music = musicSimulator.getMp().getRunningStatus();
-                    music = controller.getMusicStatus();
 
-                    // get the music value from the "music simulator"
-                    if (music) {
-                        // if true, = music is playing, set message to "a"
-                        setMessageToArduino("a");
-                    }
-                    if (!music) {
-                        // else, = music is not playing, set message to "b"
-                        setMessageToArduino("b");
-                    }
+                    try {
+                        music = controller.getMusicStatus();
 
-                    // send message to Arduino-Server
-                    dos.write(getMessageToArduino().getBytes());
-                    dos.flush();
+                        // get the music value from the "music simulator"
+                        if (music) {
+                            // if true, = music is playing, set message to "a"
+                            setMessageToArduino("a");
+                        }
+                        if (!music) {
+                            // else, = music is not playing, set message to "b"
+                            setMessageToArduino("b");
+                        }
+                        // send message to Arduino-Server
+
+                        if (controller.getGameStatus()) {
+                            dos.write(getMessageToArduino().getBytes());
+                            dos.flush();
+                        }
+
+                    } catch (Exception e) {
+                    }
 
                     // System.out.println("message sent:" + messageToArduino);
                     // System.out.println(musicSimulator.isMusic());

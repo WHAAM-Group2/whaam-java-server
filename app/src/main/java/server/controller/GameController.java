@@ -12,7 +12,7 @@ import org.opencv.videoio.VideoCapture;
 
 import javaserver.TestClient;
 import server.model.Game;
-import server.model.MusicSimulator;
+import server.model.Music;
 import server.model.Status;
 import server.model.motion.DeepNeuralNetworkProcessor;
 import server.model.motion.DnnObject;
@@ -23,10 +23,12 @@ public class GameController implements PropertyChangeListener {
     private MongoController mongo;
     private DeepNeuralNetworkProcessor processor;
     private VideoCapture camera;
-    private MusicSimulator music;
+    private Music music;
     private Game game;
     private TestClient arduino;
     private String username;
+    private boolean gameStatus = false;
+    private Person player;
 
     public GameController(MongoController mongo) throws IOException {
 
@@ -35,8 +37,13 @@ public class GameController implements PropertyChangeListener {
 
         processor = new DeepNeuralNetworkProcessor();
         camera = new VideoCapture(0);
+        player = new Person("Player");
 
-        music = new MusicSimulator();
+        try {
+            arduino = new TestClient(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -51,16 +58,12 @@ public class GameController implements PropertyChangeListener {
 
             username = ((String) document.get("username"));
 
-            music.getMp().start();
-
-            try {
-                arduino = new TestClient(this);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            music = new Music();
+            music.start();
 
             mongo.startGame(username);
-            game = new Game(this);
+            gameStatus = true;
+            game = new Game(this, player);
 
         } else {
 
@@ -101,13 +104,29 @@ public class GameController implements PropertyChangeListener {
         }
 
         mongo.updatePlayerStat(username, status);
+        music.stopGame();
 
-        music.stopPlaying();
+        gameStatus = false;
+
+        switch (status) {
+            case WIN:
+
+                music.playFinish();
+                break;
+
+            case LOSS:
+
+                music.playLoose();
+                break;
+
+            default:
+                break;
+        }
 
     }
 
     public boolean getMusicStatus() {
-        return music.getMp().getRunningStatus();
+        return music.getMusicOn();
     }
 
     public MongoController getMongo() {
@@ -134,14 +153,6 @@ public class GameController implements PropertyChangeListener {
         this.camera = camera;
     }
 
-    public MusicSimulator getMusic() {
-        return this.music;
-    }
-
-    public void setMusic(MusicSimulator music) {
-        this.music = music;
-    }
-
     public Game getGame() {
         return this.game;
     }
@@ -156,6 +167,34 @@ public class GameController implements PropertyChangeListener {
 
     public void setArduino(TestClient arduino) {
         this.arduino = arduino;
+    }
+
+    public Music getMusic() {
+        return this.music;
+    }
+
+    public void setMusic(Music music) {
+        this.music = music;
+    }
+
+    public String getUsername() {
+        return this.username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public boolean isGameStatus() {
+        return this.gameStatus;
+    }
+
+    public boolean getGameStatus() {
+        return this.gameStatus;
+    }
+
+    public void setGameStatus(boolean gameStatus) {
+        this.gameStatus = gameStatus;
     }
 
 }

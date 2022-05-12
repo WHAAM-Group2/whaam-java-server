@@ -15,13 +15,19 @@ public class Game {
     private double score;
     private GameController gameController;
     private Stopwatch stopwatch;
+    private Person player;
 
     private int mistakesCount;
 
-    public Game(GameController gameController) {
+    private int difficulty;
+
+    public Game(GameController gameController, Person player) {
 
         this.gameController = gameController;
+        this.player = player;
+
         this.stopwatch = Stopwatch.createUnstarted();
+        difficulty = 1000;
 
         startGame();
 
@@ -33,9 +39,8 @@ public class Game {
         startTime = date.getTime();
         mistakesCount = 0;
 
-        Person player = new Person("Wael");
         boolean danger = false;
-        int count = 0;
+        Stopwatch dangerTimer = Stopwatch.createUnstarted();
 
         stopwatch.start();
 
@@ -44,20 +49,34 @@ public class Game {
             gameController.updatePlayer(player);
             player.showGauge();
 
-            // if (stopwatch.elapsed().toSeconds() > 5) {
-
-            //     gameController.endGame();
-            //     break;
-
-            // }
-
             if (!gameController.getArduino().getWin()) {
-                
-                if (!gameController.getMusic().getMp().getRunningStatus()) {
-                    
-                    if (player.getLerpPercent() > 10) {
-                        gameController.endGame(0, Status.LOSS);
-                        break;
+
+                if (!gameController.getMusicStatus()) {
+
+                    if (danger) {
+
+                        if (dangerTimer.elapsed().toMillis() < difficulty) {
+                            continue;
+                        }
+
+                        if (player.getLerpPercent() > 10) {
+                            gameController.endGame(0, Status.LOSS);
+                            break;
+                        }
+
+                    } else {
+
+                        danger = true;
+                        dangerTimer.start();
+
+                    }
+
+                } else {
+
+                    if (danger) {
+                        danger = false;
+                        dangerTimer.stop();
+                        dangerTimer.reset();
                     }
 
                 }

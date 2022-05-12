@@ -32,9 +32,16 @@ public class MongoController extends Thread {
 
         mongoClient = MongoClients.create(connectionString);
 
-        MongoCollection<Document> collection = mongoClient
+        MongoCollection<Document> collection;
+
+        collection = mongoClient.getDatabase("configuration").getCollection("players");
+        collection.updateMany(new Document(), new Document("$set", new Document("status", "not playing")));
+
+        collection = mongoClient
                 .getDatabase("configuration")
                 .getCollection("setup");
+
+        collection.findOneAndUpdate(new Document("name", "setup"), new Document("$set", new Document("status", false)));
 
         while (!interrupted()) {
 
