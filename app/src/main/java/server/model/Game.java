@@ -19,7 +19,8 @@ public class Game {
 
     private int mistakesCount;
 
-    private int difficulty;
+    private int difficultyTimer;
+    private int difficultyLERP;
 
     public Game(GameController gameController, Person player) {
 
@@ -27,7 +28,9 @@ public class Game {
         this.player = player;
 
         this.stopwatch = Stopwatch.createUnstarted();
-        difficulty = 1000;
+
+        difficultyTimer = 1000;
+        difficultyLERP = 7;
 
         startGame();
 
@@ -40,6 +43,7 @@ public class Game {
         mistakesCount = 0;
 
         boolean danger = false;
+
         Stopwatch dangerTimer = Stopwatch.createUnstarted();
 
         stopwatch.start();
@@ -55,11 +59,11 @@ public class Game {
 
                     if (danger) {
 
-                        if (dangerTimer.elapsed().toMillis() < difficulty) {
+                        if (dangerTimer.elapsed().toMillis() < difficultyTimer) {
                             continue;
                         }
 
-                        if (player.getLerpPercent() > 10) {
+                        if (player.getLerpPercent() > difficultyLERP) {
                             gameController.endGame(0, Status.LOSS);
                             break;
                         }

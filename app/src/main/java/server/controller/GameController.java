@@ -7,7 +7,11 @@ import java.util.List;
 
 import org.bson.Document;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
+import org.opencv.core.Scalar;
+import org.opencv.highgui.HighGui;
+import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 import javaserver.TestClient;
@@ -88,6 +92,14 @@ public class GameController implements PropertyChangeListener {
 
             player.addRect(new Rect(person.getLeftBottom(), person.getRightTop()));
             player.updateMovement();
+
+            Imgproc.rectangle(frame, person.getLeftBottom(), person.getRightTop(), new Scalar(255));
+
+            Imgproc.putText(frame, String.format("HUMAN MOVING: %.0f%%", player.getLerpPercent()),
+                    person.getLeftBottom(), 1,
+                    2, new Scalar(0, 0, 255));
+
+            HighGui.imshow("BUTCH EYES", frame);
 
         } catch (Exception e) {
             e.printStackTrace();
