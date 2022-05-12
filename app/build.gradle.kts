@@ -22,7 +22,7 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.7.2")
 
     // This dependency is used by the application.
-    implementation("com.google.guava:guava:30.1.1-jre")
+    implementation("com.google.guava:guava:30.1.1-jre") 
     implementation("org.mongodb:mongodb-driver-sync:4.1.2")
     implementation(files("C:/Users/Wael/Downloads/opencv/build/java/opencv-455.jar"))
 
