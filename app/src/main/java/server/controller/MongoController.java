@@ -12,6 +12,10 @@ import org.bson.Document;
 
 import server.model.Status;
 
+/** 
+ * @author Wael Mahrous
+ * Class that listens and handled the connection with the database MongoDB. 
+ */
 public class MongoController extends Thread {
 
     MongoClient mongoClient;

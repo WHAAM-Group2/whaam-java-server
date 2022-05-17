@@ -8,23 +8,38 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+/**
+ * @author Anna Selstam
+ * Class that controlls the playing of the music. 
+ */
 public class Music extends Thread {
 
     private Random rand = new Random();
     private Player player;
 
-    // Variable for the Java-Server to listen to!
+    // Variable for the Java-Server to listen to! 
     private boolean musicOn = true;
 
+    /**
+     * Constructor that starts a new inner class and calls on its run-method.
+     */
     public Music() {
+
         player = new Player();
         player.start();
+
     }
 
+    // Runs when the controller (Java-Server) initializes the music.
     public void run() {
         randomizer();
     }
 
+    /**
+     * Method that listens to the inner class. 
+     * Randomizes the amount of time the music (thread) should play (be active) 
+     * or not play (be inactive).
+     */
     public void randomizer() {
         while (!Thread.interrupted()) {
 
