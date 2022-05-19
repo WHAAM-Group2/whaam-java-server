@@ -82,7 +82,11 @@ public class Music extends Thread {
 
         public void run() {
             try {
-                File musicPath = new File("sounds/Tequila.wav");
+
+                // File musicPath = new File("sounds/Tequila.wav");
+
+                File musicPath = new File("sounds/butchy.wav");
+
                 AudioInputStream audioInput = AudioSystem.getAudioInputStream(musicPath);
                 this.clip = AudioSystem.getClip();
                 clip.open(audioInput);

@@ -29,7 +29,7 @@ public class Game {
 
         this.stopwatch = Stopwatch.createUnstarted();
 
-        difficultyTimer = 1000;
+        difficultyTimer = 1200;
         difficultyLERP = 7;
 
         startGame();
@@ -53,59 +53,67 @@ public class Game {
             gameController.updatePlayer(player);
             player.showGauge();
 
-            if (!gameController.getArduino().getWin()) {
+            if (!gameController.getMusicStatus()) {
 
-                if (!gameController.getMusicStatus()) {
+                if (danger) {
 
-                    if (danger) {
+                    if (dangerTimer.elapsed().toMillis() < difficultyTimer
+                            || stopwatch.elapsed().toSeconds() >= 60) {
+                        continue;
+                    }
 
-                        if (dangerTimer.elapsed().toMillis() < difficultyTimer) {
-                            continue;
-                        }
-
-                        if (player.getLerpPercent() > difficultyLERP) {
-                            gameController.endGame(0, Status.LOSS);
-                            break;
-                        }
-
-                    } else {
-
-                        danger = true;
-                        dangerTimer.start();
-
+                    if (player.getLerpPercent() > difficultyLERP) {
+                        gameController.endGame(0, Status.LOSS);
+                        break;
                     }
 
                 } else {
 
-                    if (danger) {
-                        danger = false;
-                        dangerTimer.stop();
-                        dangerTimer.reset();
-                    }
+                    danger = true;
+                    dangerTimer.start();
 
                 }
 
             } else {
 
+                if (danger) {
+                    danger = false;
+                    dangerTimer.stop();
+                    dangerTimer.reset();
+                }
+
+            }
+
+            if (gameController.getArduino().getWin()) {
                 gameController.endGame(stopwatch.elapsed().toSeconds(), Status.WIN);
                 System.out.println("Game ended.");
                 break;
             }
 
+            // if (!gameController.getArduino().getWin()) {
+
+            // } else {
+
+            // gameController.endGame(stopwatch.elapsed().toSeconds(), Status.WIN);
+            // System.out.println("Game ended.");
+            // break;
+
+            // }
+
         }
 
     }
 
-    public void endGame() {
+    // public void endGame() {
 
-        Date date = new Date();
-        endTime = date.getTime();
+    // Date date = new Date();
+    // endTime = date.getTime();
 
-        score = (endTime - startTime);
+    // score = (endTime - startTime);
 
-        setMistakesCount(0);
+    // setMistakesCount(0);
 
-    }
+    // }
 
     public long getStartTime() {
         return this.startTime;
@@ -135,18 +143,6 @@ public class Game {
 
         return getScore() / 1000;
 
-    }
-
-    public int getMistakesCount() {
-        return this.mistakesCount;
-    }
-
-    public void setMistakesCount(int mistakesCount) {
-        this.mistakesCount = mistakesCount;
-    }
-
-    public void addMistake() {
-        mistakesCount++;
     }
 
 }

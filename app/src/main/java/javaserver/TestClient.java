@@ -18,12 +18,11 @@ public class TestClient {
     private String messageToArduino;
     private byte messageFromArduino;
     private GameController controller;
+    private boolean musicBefore;
 
     public TestClient(GameController controller) throws IOException {
         System.out.println("Started Arduino Client");
         this.controller = controller;
-        // musicSimulator = new MusicSimulator();
-        // musicSimulator = new MusicSimulator();
         connectToArduino();
 
     }
@@ -34,6 +33,7 @@ public class TestClient {
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
         new ArduinoHandler();
+        musicBefore = false;
         // new MessageReceiver();
 
     }
@@ -49,10 +49,6 @@ public class TestClient {
             try {
                 while (true) {
 
-                    // if (!controller.getGameStatus()) {
-                    // continue;
-                    // }
-
                     messageFromArduino = dis.readByte();
                     // 87 = W
                     if (messageFromArduino == 87) {
@@ -62,13 +58,6 @@ public class TestClient {
                     if (messageFromArduino == 76) {
                         setWin(false);
                     }
-                    // if (messageFromArduino == 67) {
-                    // System.out.println("C");
-                    // }
-                    System.out.println("message received:" + win);
-
-                    // music = musicSimulator.isMusic();
-                    // music = musicSimulator.getMp().getRunningStatus();
 
                     try {
                         music = controller.getMusicStatus();
@@ -84,16 +73,15 @@ public class TestClient {
                         }
                         // send message to Arduino-Server
 
-                        if (controller.getGameStatus()) {
+                        if (controller.getGameStatus() && musicBefore != music) {
                             dos.write(getMessageToArduino().getBytes());
                             dos.flush();
+                            musicBefore = music;
                         }
 
                     } catch (Exception e) {
                     }
 
-                    // System.out.println("message sent:" + messageToArduino);
-                    // System.out.println(musicSimulator.isMusic());
                 }
             } catch (NullPointerException | IOException e) {
                 e.printStackTrace();

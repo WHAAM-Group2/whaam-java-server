@@ -40,7 +40,8 @@ public class GameController implements PropertyChangeListener {
         this.mongo.addPropertyChangeListener(this);
 
         processor = new DeepNeuralNetworkProcessor();
-        camera = new VideoCapture(0);
+
+        camera = new VideoCapture(1);
         player = new Person("Player");
 
         try {
@@ -61,6 +62,12 @@ public class GameController implements PropertyChangeListener {
             System.out.println("Starting a game...");
 
             username = ((String) document.get("username"));
+
+            do {
+                
+                System.out.println("Waiting...");
+
+            } while (getArduino().getWin());
 
             music = new Music();
             music.start();
