@@ -23,6 +23,8 @@ public class TestClient {
     private GameController controller;
     private boolean musicBefore;
 
+    private boolean sensorCovered;
+
     public TestClient(GameController controller) throws IOException {
         System.out.println("Started Arduino Client");
         this.controller = controller;
@@ -54,12 +56,13 @@ public class TestClient {
 
                     messageFromArduino = dis.readByte();
                     // 87 = W
-                    if (messageFromArduino == 87) {
-                        setWin(true);
+                    if (messageFromArduino == 84) {
+                        setSensorCovered(true);
+                        // setWin(true);
                     }
                     // 76 = L
-                    if (messageFromArduino == 76) {
-                        setWin(false);
+                    if (messageFromArduino == 70) {
+                        setSensorCovered(false);
                     }
 
                     try {
@@ -96,14 +99,33 @@ public class TestClient {
     // new TestClient();
     // }
 
-    public boolean isWin() {
-        return win;
+
+    public boolean isMusicBefore() {
+        return this.musicBefore;
     }
 
-    public void setWin(boolean win) {
-        this.win = win;
+    public boolean getMusicBefore() {
+        return this.musicBefore;
     }
 
+    public void setMusicBefore(boolean musicBefore) {
+        this.musicBefore = musicBefore;
+    }
+
+    public boolean isSensorCovered() {
+        return this.sensorCovered;
+    }
+
+    public boolean getSensorCovered() {
+        return this.sensorCovered;
+    }
+
+    public void setSensorCovered(boolean sensorCovered) {
+        this.sensorCovered = sensorCovered;
+    }
+
+
+    
     public String getMessageToArduino() {
         return messageToArduino;
     }
@@ -142,10 +164,6 @@ public class TestClient {
 
     public void setDos(DataOutputStream dos) {
         this.dos = dos;
-    }
-
-    public boolean getWin() {
-        return this.win;
     }
 
     public boolean isMusic() {

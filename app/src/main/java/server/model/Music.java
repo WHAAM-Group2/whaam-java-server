@@ -45,7 +45,7 @@ public class Music extends Thread {
 
             while (musicOn) {
 
-                startMusic();
+                startMusic(); 
                 try {
                     int x = rand.nextInt(6);
                     if (x >= 1) {
@@ -53,7 +53,7 @@ public class Music extends Thread {
                         musicOn = false;
                     }
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    // e.printStackTrace();
                 }
             }
 

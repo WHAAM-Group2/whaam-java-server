@@ -72,12 +72,11 @@ public class Game {
 
                 if (danger) {
 
-                    if (dangerTimer.elapsed().toMillis() < difficultyTimer
-                            || stopwatch.elapsed().toSeconds() >= 60) {
+                    if (dangerTimer.elapsed().toMillis() < difficultyTimer) {
                         continue;
                     }
 
-                    if (player.getLerpPercent() > difficultyLERP) {
+                    if (player.getLerpPercent() > difficultyLERP || stopwatch.elapsed().toSeconds() >= 60) {
                         gameController.endGame(0, Status.LOSS);
                         break;
                     }
@@ -99,7 +98,7 @@ public class Game {
 
             }
 
-            if (gameController.getArduino().getWin()) {
+            if (!gameController.getArduino().getSensorCovered()) {
                 gameController.endGame(stopwatch.elapsed().toSeconds(), Status.WIN);
                 System.out.println("Game ended.");
                 break;
