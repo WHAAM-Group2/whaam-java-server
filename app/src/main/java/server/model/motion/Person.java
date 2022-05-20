@@ -11,6 +11,10 @@ import org.opencv.highgui.HighGui;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+/**
+ * @author Wael Mahrous
+ * Description here! +Comment the whole class!  
+ */
 public class Person {
 
     private String name;

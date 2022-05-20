@@ -24,10 +24,9 @@ dependencies {
     // This dependency is used by the application.
     implementation("com.google.guava:guava:30.1.1-jre") 
     implementation("org.mongodb:mongodb-driver-sync:4.1.2")
-    implementation(files("C:/Users/Wael/Downloads/opencv/build/java/opencv-455.jar"))
+    implementation(files("/usr/local/Cellar/opencv/4.5.5_1/share/java/opencv4/opencv-455.jar"))
 
     //embedded system jar-files
-    
     //implementation(files("/Users/malinramkull/Desktop/jarfiles/arduino.jar"))
     //implementation(files("/Users/malinramkull/Desktop/jarfiles/jSerialComm-1.3.11.jar"))
 }

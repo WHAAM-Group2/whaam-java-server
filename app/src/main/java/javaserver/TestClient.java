@@ -7,6 +7,10 @@ import java.net.Socket;
 
 import server.controller.GameController;
 
+/** 
+ * @author Malin Ramkull & Hedda Eriksson 
+ * Description here! +Comment the whole class! 
+ */
 public class TestClient {
     private int port = 1337;
     private String ipArduino = "192.168.0.12";
@@ -14,7 +18,6 @@ public class TestClient {
     private DataOutputStream dos;
     private boolean win;
     private boolean music;
-    private MusicSimulator musicSimulator;
     private String messageToArduino;
     private byte messageFromArduino;
     private GameController controller;
@@ -155,14 +158,6 @@ public class TestClient {
 
     public void setMusic(boolean music) {
         this.music = music;
-    }
-
-    public MusicSimulator getMusicSimulator() {
-        return this.musicSimulator;
-    }
-
-    public void setMusicSimulator(MusicSimulator musicSimulator) {
-        this.musicSimulator = musicSimulator;
     }
 
     public byte getMessageFromArduino() {

@@ -8,6 +8,10 @@ import server.controller.GameController;
 
 import server.model.motion.Person;
 
+/** 
+ * @author Wael Mahrous & Anna Selstam
+ * This class runs a game and checks all the variables needed. 
+ */
 public class Game {
 
     private long startTime;
@@ -22,6 +26,12 @@ public class Game {
     private int difficultyTimer;
     private int difficultyLERP;
 
+    /**
+     * Constructor.
+     * Wael comment here!
+     * @param gameController
+     * @param player
+     */
     public Game(GameController gameController, Person player) {
 
         this.gameController = gameController;
@@ -36,6 +46,11 @@ public class Game {
 
     }
 
+    /** 
+     * Starts a new game-session, constantly checking the values of the 
+     * Arduino, the music, the Lerp %, and the maximum allowed time,
+     * to controll wether a game should be active or not.
+     */
     public void startGame() {
 
         Date date = new Date();
