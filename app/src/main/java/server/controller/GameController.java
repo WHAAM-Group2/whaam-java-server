@@ -41,7 +41,7 @@ public class GameController implements PropertyChangeListener {
 
         processor = new DeepNeuralNetworkProcessor();
 
-        camera = new VideoCapture(1);
+        camera = new VideoCapture(0);
         player = new Person("Player");
 
         try {
@@ -67,7 +67,7 @@ public class GameController implements PropertyChangeListener {
                 
                 System.out.println("Waiting...");
 
-            } while (getArduino().getWin());
+            } while (!getArduino().getSensorCovered());
 
             music = new Music();
             music.start();
