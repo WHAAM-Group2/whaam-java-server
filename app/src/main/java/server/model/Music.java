@@ -32,7 +32,7 @@ public class Music extends Thread {
 
                 startMusic(); 
                 try {
-                    int x = rand.nextInt(6);
+                    int x = rand.nextInt(4);
                     if (x >= 1) {
                         TimeUnit.SECONDS.sleep(x);
                         musicOn = false;

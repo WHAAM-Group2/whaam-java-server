@@ -17,8 +17,6 @@ public class Game {
     private Stopwatch stopwatch;
     private Person player;
 
-    private int mistakesCount;
-
     private int difficultyTimer;
     private int difficultyLERP;
 
@@ -29,8 +27,8 @@ public class Game {
 
         this.stopwatch = Stopwatch.createUnstarted();
 
-        difficultyTimer = 1200;
-        difficultyLERP = 7;
+        difficultyTimer = 1000;
+        difficultyLERP = 5;
 
         startGame();
 
@@ -40,7 +38,6 @@ public class Game {
 
         Date date = new Date();
         startTime = date.getTime();
-        mistakesCount = 0;
 
         boolean danger = false;
 
@@ -89,30 +86,9 @@ public class Game {
                 break;
             }
 
-            // if (!gameController.getArduino().getWin()) {
-
-            // } else {
-
-            // gameController.endGame(stopwatch.elapsed().toSeconds(), Status.WIN);
-            // System.out.println("Game ended.");
-            // break;
-
-            // }
-
         }
 
     }
-
-    // public void endGame() {
-
-    // Date date = new Date();
-    // endTime = date.getTime();
-
-    // score = (endTime - startTime);
-
-    // setMistakesCount(0);
-
-    // }
 
     public long getStartTime() {
         return this.startTime;

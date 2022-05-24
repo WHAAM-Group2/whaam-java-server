@@ -104,7 +104,7 @@ public class GameController implements PropertyChangeListener {
 
             Imgproc.putText(frame, String.format("HUMAN MOVING: %.0f%%", player.getLerpPercent()),
                     person.getLeftBottom(), 1,
-                    2, new Scalar(0, 0, 255));
+                    1, new Scalar(0, 0, 255));
 
             HighGui.imshow("BUTCH EYES", frame);
 
