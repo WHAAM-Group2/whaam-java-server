@@ -10,7 +10,9 @@ import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+import org.opencv.core.Size;
 import org.opencv.highgui.HighGui;
+import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
@@ -50,6 +52,11 @@ public class GameController implements PropertyChangeListener {
             e.printStackTrace();
         }
 
+        while (true) {
+            updatePlayer(player);
+            player.showGauge();
+        }
+
     }
 
     @Override
@@ -64,7 +71,7 @@ public class GameController implements PropertyChangeListener {
             username = ((String) document.get("username"));
 
             do {
-                
+
                 System.out.println("Waiting...");
 
             } while (!getArduino().getSensorCovered());
@@ -89,6 +96,13 @@ public class GameController implements PropertyChangeListener {
         Mat frame = new Mat();
         camera.read(frame);
 
+        // var M = Imgproc.getRotationMatrix2D(new Point(frame.height() / 2, frame.width() / 2), 90, 1);
+        // Imgproc.warpAffine(frame, frame, M, new Size(frame.height(), frame.width()));
+
+        // frame = frame.submat(0, frame.height(), frame.width() / 5, frame.width() - frame.width() / 2);
+        
+        // Imgproc.resize(frame, frame, new Size(400, 800));
+
         List<DnnObject> detectObject = processor.getObjectsInFrame(frame, false);
 
         try {
@@ -106,11 +120,11 @@ public class GameController implements PropertyChangeListener {
                     person.getLeftBottom(), 1,
                     1, new Scalar(0, 0, 255));
 
-            HighGui.imshow("BUTCH EYES", frame);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        HighGui.imshow("BUTCH EYES", frame);
 
     }
 
