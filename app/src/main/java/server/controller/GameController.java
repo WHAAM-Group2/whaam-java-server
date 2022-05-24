@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.bson.Document;
 import org.opencv.core.Mat;
-import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
@@ -24,6 +23,10 @@ import server.model.motion.DeepNeuralNetworkProcessor;
 import server.model.motion.DnnObject;
 import server.model.motion.Person;
 
+/** 
+ * @author Wael Mahrous & Anna Selstam
+ * This class handles the logic/delegation of the program. 
+ */
 public class GameController implements PropertyChangeListener {
 
     private MongoController mongo;
@@ -36,6 +39,10 @@ public class GameController implements PropertyChangeListener {
     private boolean gameStatus = false;
     private Person player;
 
+    /** 
+     * Contructor. 
+     * @param mongo - Opens up connection towards the database.
+     */
     public GameController(MongoController mongo) throws IOException {
 
         this.mongo = mongo;
@@ -59,6 +66,11 @@ public class GameController implements PropertyChangeListener {
 
     }
 
+    /**
+     * When triggered because of a new "signed in" player at the website,
+     * it starts a new game and intiates the music. 
+     * Game then runs the session.
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
@@ -91,6 +103,10 @@ public class GameController implements PropertyChangeListener {
 
     }
 
+    /**
+     * Assigns a player its movement shown on the frame which displays the camera.
+     * @param player
+     */
     public void updatePlayer(Person player) {
 
         Mat frame = new Mat();
@@ -128,8 +144,18 @@ public class GameController implements PropertyChangeListener {
 
     }
 
+    /**
+     * Called on by Game, this updates the details to the database through a 
+     * method in MongoController, stops the music and plays the correct music
+     * according to the status. 
+     * 
+     * @param l - seconds the game was running
+     * @param status - enum, either Win or Loss
+     */
     public void endGame(long l, Status status) {
 
+        // If the time actually is time over 0, it will register as normal. 
+        // Else, it will automatically assign it a number so large, it will never make the highscore.
         if (l != 0) {
             mongo.endGame(username, l);
         } else {

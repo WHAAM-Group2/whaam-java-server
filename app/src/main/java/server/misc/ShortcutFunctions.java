@@ -5,6 +5,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+/** 
+ * @author Wael Mahrous
+ */
 public class ShortcutFunctions {
 
     /**
