@@ -9,14 +9,11 @@ import org.bson.Document;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
-import org.opencv.core.Size;
 import org.opencv.highgui.HighGui;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
 import javaserver.ArduinoHandler;
-import javaserver.TestClient;
 import server.model.Game;
 import server.model.Music;
 import server.model.Status;
@@ -35,7 +32,6 @@ public class GameController implements PropertyChangeListener {
     private VideoCapture camera;
     private Music music;
     private Game game;
-    // private TestClient arduino;
     private ArduinoHandler arduino;
     private String username;
     private boolean gameStatus = false;
@@ -57,18 +53,12 @@ public class GameController implements PropertyChangeListener {
         player = new Person("Player");
 
         try {
-            // arduino = new TestClient(this);
             arduino = new ArduinoHandler(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         new PlayerShower();
-
-        // while (true) {
-        // updatePlayer(player);
-        // player.showGauge();
-        // }
 
     }
 
@@ -118,16 +108,6 @@ public class GameController implements PropertyChangeListener {
 
         Mat frame = new Mat();
         camera.read(frame);
-
-        // var M = Imgproc.getRotationMatrix2D(new Point(frame.height() / 2,
-        // frame.width() / 2), 90, 1);
-        // Imgproc.warpAffine(frame, frame, M, new Size(frame.height(), frame.width()));
-
-        // frame = frame.submat(0, frame.height(), frame.width() / 5, frame.width() -
-        // frame.width() / 2);
-
-        // Imgproc.resize(frame, frame, new Size(frame.width() * 2, frame.height() *
-        // 2));
 
         List<DnnObject> detectObject = processor.getObjectsInFrame(frame, false);
 
@@ -179,6 +159,7 @@ public class GameController implements PropertyChangeListener {
         gameStatus = false;
 
         switch (status) {
+
             case WIN:
 
                 music.playFinish();
@@ -191,10 +172,14 @@ public class GameController implements PropertyChangeListener {
 
             default:
                 break;
+
         }
 
     }
 
+    /**
+     * Class to update and show player movement as no game is ongoing. Looks pretty.
+     */
     private class PlayerShower extends Thread {
 
         public PlayerShower() {
@@ -252,14 +237,6 @@ public class GameController implements PropertyChangeListener {
     public void setGame(Game game) {
         this.game = game;
     }
-
-    // public TestClient getArduino() {
-    // return this.arduino;
-    // }
-
-    // public void setArduino(TestClient arduino) {
-    // this.arduino = arduino;
-    // }
 
     public ArduinoHandler getArduino() {
         return this.arduino;
