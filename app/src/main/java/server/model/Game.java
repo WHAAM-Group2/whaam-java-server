@@ -26,7 +26,7 @@ public class Game {
 
     /**
      * Constructor.
-     * Wael comment here!
+     * Starts a new game and consequently initiates the stopwatch and difficulty level of the game.
      * @param gameController
      * @param player
      */

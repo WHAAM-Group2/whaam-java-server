@@ -15,6 +15,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
+import javaserver.ArduinoHandler;
 import javaserver.TestClient;
 import server.model.Game;
 import server.model.Music;
@@ -23,9 +24,9 @@ import server.model.motion.DeepNeuralNetworkProcessor;
 import server.model.motion.DnnObject;
 import server.model.motion.Person;
 
-/** 
+/**
  * @author Wael Mahrous & Anna Selstam
- * This class handles the logic/delegation of the program. 
+ *         This class handles the logic/delegation of the program.
  */
 public class GameController implements PropertyChangeListener {
 
@@ -34,13 +35,15 @@ public class GameController implements PropertyChangeListener {
     private VideoCapture camera;
     private Music music;
     private Game game;
-    private TestClient arduino;
+    // private TestClient arduino;
+    private ArduinoHandler arduino;
     private String username;
     private boolean gameStatus = false;
     private Person player;
 
-    /** 
-     * Contructor. 
+    /**
+     * Contructor.
+     * 
      * @param mongo - Opens up connection towards the database.
      */
     public GameController(MongoController mongo) throws IOException {
@@ -54,21 +57,22 @@ public class GameController implements PropertyChangeListener {
         player = new Person("Player");
 
         try {
-            arduino = new TestClient(this);
+            // arduino = new TestClient(this);
+            arduino = new ArduinoHandler(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        while (true) {
-            updatePlayer(player);
-            player.showGauge();
-        }
+        // while (true) {
+        //     updatePlayer(player);
+        //     player.showGauge();
+        // }
 
     }
 
     /**
      * When triggered because of a new "signed in" player at the website,
-     * it starts a new game and intiates the music. 
+     * it starts a new game and intiates the music.
      * Game then runs the session.
      */
     @Override
@@ -105,6 +109,7 @@ public class GameController implements PropertyChangeListener {
 
     /**
      * Assigns a player its movement shown on the frame which displays the camera.
+     * 
      * @param player
      */
     public void updatePlayer(Person player) {
@@ -112,11 +117,13 @@ public class GameController implements PropertyChangeListener {
         Mat frame = new Mat();
         camera.read(frame);
 
-        // var M = Imgproc.getRotationMatrix2D(new Point(frame.height() / 2, frame.width() / 2), 90, 1);
+        // var M = Imgproc.getRotationMatrix2D(new Point(frame.height() / 2,
+        // frame.width() / 2), 90, 1);
         // Imgproc.warpAffine(frame, frame, M, new Size(frame.height(), frame.width()));
 
-        // frame = frame.submat(0, frame.height(), frame.width() / 5, frame.width() - frame.width() / 2);
-        
+        // frame = frame.submat(0, frame.height(), frame.width() / 5, frame.width() -
+        // frame.width() / 2);
+
         // Imgproc.resize(frame, frame, new Size(400, 800));
 
         List<DnnObject> detectObject = processor.getObjectsInFrame(frame, false);
@@ -145,17 +152,18 @@ public class GameController implements PropertyChangeListener {
     }
 
     /**
-     * Called on by Game, this updates the details to the database through a 
+     * Called on by Game, this updates the details to the database through a
      * method in MongoController, stops the music and plays the correct music
-     * according to the status. 
+     * according to the status.
      * 
-     * @param l - seconds the game was running
+     * @param l      - seconds the game was running
      * @param status - enum, either Win or Loss
      */
     public void endGame(long l, Status status) {
 
-        // If the time actually is time over 0, it will register as normal. 
-        // Else, it will automatically assign it a number so large, it will never make the highscore.
+        // If the time actually is time over 0, it will register as normal.
+        // Else, it will automatically assign it a number so large, it will never make
+        // the highscore.
         if (l != 0) {
             mongo.endGame(username, l);
         } else {
@@ -220,12 +228,28 @@ public class GameController implements PropertyChangeListener {
         this.game = game;
     }
 
-    public TestClient getArduino() {
+    // public TestClient getArduino() {
+    // return this.arduino;
+    // }
+
+    // public void setArduino(TestClient arduino) {
+    // this.arduino = arduino;
+    // }
+
+    public ArduinoHandler getArduino() {
         return this.arduino;
     }
 
-    public void setArduino(TestClient arduino) {
+    public void setArduino(ArduinoHandler arduino) {
         this.arduino = arduino;
+    }
+
+    public Person getPlayer() {
+        return this.player;
+    }
+
+    public void setPlayer(Person player) {
+        this.player = player;
     }
 
     public Music getMusic() {
