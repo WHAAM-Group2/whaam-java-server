@@ -63,9 +63,11 @@ public class GameController implements PropertyChangeListener {
             e.printStackTrace();
         }
 
+        new PlayerShower();
+
         // while (true) {
-        //     updatePlayer(player);
-        //     player.showGauge();
+        // updatePlayer(player);
+        // player.showGauge();
         // }
 
     }
@@ -124,7 +126,8 @@ public class GameController implements PropertyChangeListener {
         // frame = frame.submat(0, frame.height(), frame.width() / 5, frame.width() -
         // frame.width() / 2);
 
-        // Imgproc.resize(frame, frame, new Size(400, 800));
+        // Imgproc.resize(frame, frame, new Size(frame.width() * 2, frame.height() *
+        // 2));
 
         List<DnnObject> detectObject = processor.getObjectsInFrame(frame, false);
 
@@ -188,6 +191,28 @@ public class GameController implements PropertyChangeListener {
 
             default:
                 break;
+        }
+
+    }
+
+    private class PlayerShower extends Thread {
+
+        public PlayerShower() {
+            start();
+        }
+
+        @Override
+        public void run() {
+
+            while (!interrupted()) {
+
+                if (!gameStatus) {
+                    updatePlayer(player);
+                    player.showGauge();
+                }
+
+            }
+
         }
 
     }

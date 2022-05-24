@@ -8,9 +8,9 @@ import server.controller.GameController;
 
 import server.model.motion.Person;
 
-/** 
+/**
  * @author Wael Mahrous & Anna Selstam
- * This class runs a game and checks all the variables needed. 
+ *         This class runs a game and checks all the variables needed.
  */
 public class Game {
 
@@ -26,7 +26,9 @@ public class Game {
 
     /**
      * Constructor.
-     * Starts a new game and consequently initiates the stopwatch and difficulty level of the game.
+     * Starts a new game and consequently initiates the stopwatch and difficulty
+     * level of the game.
+     * 
      * @param gameController
      * @param player
      */
@@ -44,15 +46,15 @@ public class Game {
 
     }
 
-    /** 
-     * Starts a new game-session, constantly checking the values of the 
+    /**
+     * Starts a new game-session, constantly checking the values of the
      * Arduino, the music, the Lerp %, and the maximum allowed time,
      * to controll wether a game should be active or not.
      */
     public void startGame() {
 
-        Date date = new Date();
-        startTime = date.getTime();
+        gameController.updatePlayer(player);
+        player.showGauge();
 
         boolean danger = false;
 
