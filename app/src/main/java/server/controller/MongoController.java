@@ -12,9 +12,10 @@ import org.bson.Document;
 
 import server.model.Status;
 
-/** 
+/**
  * @author Wael Mahrous
- * Class that listens and handled the connection with the database MongoDB. 
+ *         Class that listens and handles the connection with the database
+ *         MongoDB.
  */
 public class MongoController extends Thread {
 
@@ -22,6 +23,11 @@ public class MongoController extends Thread {
     String connectionString;
     PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
+    /**
+     * Initiates the connection to the specified connection string.
+     * 
+     * @param connectionString
+     */
     public MongoController(String connectionString) {
 
         this.connectionString = connectionString;
@@ -29,6 +35,10 @@ public class MongoController extends Thread {
 
     }
 
+    /**
+     * Resets game status for everyone on the database. Thereafter actively listens
+     * to changes in the configuration document and notifies the game controller.
+     */
     @Override
     public void run() {
 
@@ -62,6 +72,12 @@ public class MongoController extends Thread {
 
     }
 
+    /**
+     * Represents an end of game for the database. Will skip updating scoreboard if score is corrupted.
+     * @param username
+     * @param l
+     */
+
     public void endGame(String username, long l) {
 
         MongoCollection<Document> collection = mongoClient
@@ -92,6 +108,11 @@ public class MongoController extends Thread {
 
     }
 
+    /**
+     * Starts a game for the specified username.
+     * @param username
+     */
+
     public void startGame(String username) {
 
         MongoCollection<Document> collection = mongoClient
@@ -112,6 +133,11 @@ public class MongoController extends Thread {
         pcs.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Updates the specified player's latest game stat.
+     * @param username
+     * @param status
+     */
     public void updatePlayerStat(String username, Status status) {
 
         MongoCollection<Document> collection = mongoClient

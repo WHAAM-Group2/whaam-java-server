@@ -1,13 +1,13 @@
 package server.model.motion;
 
-public class Lerper {
+/**
+ * @author Wael Mahrous
+ * 
+ *         Class that attempts to smooth acceleration of the average movement
+ *         measured for a detected DNN Object.
+ */
 
-    // If we change the target at the same time, the current acceleration will be
-    // higher if its more and vice versa. Therefore, we can set a maximum
-    // acceleration and
-    // if the the current acceleration is higher than that, a danger flag will be on
-    // and there
-    // we will add mistakes.
+public class Lerper {
 
     private double amount = 0.1;
     private double minVelocity = 0.001;
@@ -15,9 +15,28 @@ public class Lerper {
     private double acceleration = 10;
     private boolean resting = true;
 
+    /**
+     * Calculates the correct velocity based on current position and target
+     * position.
+     * 
+     * @param position Position of object attempting to move towards target.
+     * @param target   Position of target.
+     * @return
+     */
+
     private double LerpVelocity(double position, double target) {
         return (target - position) * amount;
     }
+
+    /**
+     * "Moves" the object towards the target. This simply means that this function
+     * will take the position variable and change it's value according to the linear
+     * interpolation algorithm written.
+     * 
+     * @param position Position of object attempting to move towards target.
+     * @param target   Position of target.
+     * @return
+     */
 
     public double Lerp(double position, double target) {
 
@@ -28,29 +47,21 @@ public class Lerper {
         } else if (v == acceleration) {
             v = previousVelocity - acceleration;
 
-            // we might actually end up moving away from the target
-            // here in which case we adjust the target so we don't get
-            // clamped to it later
             if (v == 0 && previousVelocity == acceleration) {
                 v = previousVelocity + acceleration;
-                // we might actually end up moving away from the target
-                // here in which case we adjust the target so we don't get
-                // clamped to it later
+
                 if (v > 0 - minVelocity)
                     v = minVelocity;
-                // else
-                // target = float.MinValue;
+
             }
         }
 
-        // If this is less than the minimum velocity then
-        // clamp at minimum velocity
         if (Math.abs(v) < minVelocity) {
             v = minVelocity;
         }
         previousVelocity = v;
         position += v;
-        // Now account for potential overshoot and clamp to target if necessary
+
         if (Math.abs(position - target) < 0.1) {
             position = target;
             resting = true;

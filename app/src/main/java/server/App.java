@@ -8,6 +8,13 @@ import server.controller.GameController;
 import server.controller.MongoController;
 import server.misc.ShortcutFunctions;
 
+/**
+ * @author Wael Mahrous
+ * 
+ *         Main class. Needs argument to connect to correct camera. Will
+ *         thereafter start a mongocontroller and gamecontroller.
+ */
+
 public class App {
 
     MongoClient mongoClient;

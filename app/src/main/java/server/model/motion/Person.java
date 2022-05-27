@@ -13,7 +13,9 @@ import org.opencv.imgproc.Imgproc;
 
 /**
  * @author Wael Mahrous
- * Description here! +Comment the whole class!  
+ * 
+ *         Class that represents a detected person. Saves information of
+ *         person's average movement.
  */
 public class Person {
 
@@ -29,6 +31,13 @@ public class Person {
 
     Mat gauge = Imgcodecs.imread("data/NUMBERLINE.png");
 
+    /**
+     * Constructor.
+     * Creates a Person object with a name identifier.
+     * 
+     * @param name
+     */
+
     public Person(String name) {
 
         this.name = name;
@@ -40,6 +49,13 @@ public class Person {
 
     }
 
+    /**
+     * Adds a rectangle to the list of existing rectangles. Will only save the last
+     * 15 rectangles and update continuously.
+     * 
+     * @param rect_
+     */
+
     public void addRect(Rect rect_) {
 
         if (rectHistory.size() > 15) {
@@ -49,6 +65,11 @@ public class Person {
         rectHistory.addFirst(rect_);
 
     }
+
+    /**
+     * Displays a guage to represent the average movement and smoothed average
+     * movement on a graph/ vertical numberline.
+     */
 
     public void showGauge() {
 

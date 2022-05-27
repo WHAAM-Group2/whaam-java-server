@@ -2,6 +2,12 @@ package server.model.motion;
 
 import org.opencv.core.Point;
 
+/**
+ * @author Wael Mahrous
+ * 
+ * Represents a detected Deep Neural Network object.
+ */
+
 public class DnnObject {
 
     private int objectClassId;
