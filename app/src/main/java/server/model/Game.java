@@ -1,7 +1,5 @@
 package server.model;
 
-import java.util.Date;
-
 import com.google.common.base.Stopwatch;
 
 import server.controller.GameController;
@@ -40,7 +38,7 @@ public class Game {
         this.stopwatch = Stopwatch.createUnstarted();
 
         difficultyTimer = 1000;
-        difficultyLERP = 5;
+        difficultyLERP = 10;
 
         startGame();
 

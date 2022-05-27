@@ -1,35 +1,31 @@
-package javaserver;
+package server.controller;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-import server.controller.GameController;
-
 /** 
  * @author Malin Ramkull & Hedda Eriksson 
- * Description here! +Comment the whole class! 
+ *  Program that runs on a thread and connects as a client to an Arduino Uno device. 
+ *  Connection is established by using TCP and is used to transmit data in both directions.    
  */
-public class TestClient {
+public class ArduinoHandler extends Thread {
     private int port = 1337;
     private String ipArduino = "192.168.0.12";
     private DataInputStream dis;
     private DataOutputStream dos;
-    private boolean win;
+    private boolean sensorCovered;
     private boolean music;
+    private boolean musicBefore;
     private String messageToArduino;
     private byte messageFromArduino;
     private GameController controller;
-    private boolean musicBefore;
 
-    private boolean sensorCovered;
-
-    public TestClient(GameController controller) throws IOException {
+    public ArduinoHandler(GameController controller) throws IOException {
         System.out.println("Started Arduino Client");
         this.controller = controller;
         connectToArduino();
-
     }
 
     public void connectToArduino() throws IOException {
@@ -37,69 +33,54 @@ public class TestClient {
         System.out.println("Gamehandler started");
         dis = new DataInputStream(socket.getInputStream());
         dos = new DataOutputStream(socket.getOutputStream());
-        new ArduinoHandler();
         musicBefore = false;
-        // new MessageReceiver();
-
+        start();
     }
 
-    private class ArduinoHandler extends Thread {
+    @Override
+    public void run() {
+        try {
+            while (true) {
 
-        public ArduinoHandler() {
-            start();
-        }
-
-        @Override
-        public void run() {
-            try {
-                while (true) {
-
-                    messageFromArduino = dis.readByte();
-                    // 87 = W
-                    if (messageFromArduino == 84) {
-                        setSensorCovered(true);
-                        // setWin(true);
-                    }
-                    // 76 = L
-                    if (messageFromArduino == 70) {
-                        setSensorCovered(false);
-                    }
-
-                    try {
-                        music = controller.getMusicStatus();
-
-                        // get the music value from the "music simulator"
-                        if (music) {
-                            // if true, = music is playing, set message to "a"
-                            setMessageToArduino("a");
-                        }
-                        if (!music) {
-                            // else, = music is not playing, set message to "b"
-                            setMessageToArduino("b");
-                        }
-                        // send message to Arduino-Server
-
-                        if (controller.getGameStatus() && musicBefore != music) {
-                            dos.write(getMessageToArduino().getBytes());
-                            dos.flush();
-                            musicBefore = music;
-                        }
-
-                    } catch (Exception e) {
-                    }
-
+                messageFromArduino = dis.readByte();
+                // 84 = T
+                if (messageFromArduino == 84) {
+                    setSensorCovered(true);
+                    
                 }
-            } catch (NullPointerException | IOException e) {
-                e.printStackTrace();
+                // 70 = F
+                if (messageFromArduino == 70) {
+                    setSensorCovered(false);
+                }
+
+                try {
+                    music = controller.getMusicStatus();
+
+                    if (music) {
+                        // if true, = music is playing, set message to "a"
+                        setMessageToArduino("a");
+                    }
+                    if (!music) {
+                        // else, = music is not playing, set message to "b"
+                        setMessageToArduino("b");
+                    }
+
+                    if (controller.getGameStatus() && musicBefore != music) {
+                        dos.write(getMessageToArduino().getBytes());
+                        dos.flush();
+                        musicBefore = music;
+                    }
+
+                } catch (Exception e) {
+                }
+
             }
+        } catch (NullPointerException | IOException e) {
+            e.printStackTrace();
         }
     }
 
-    // public static void main(String[] args) throws IOException {
-    // new TestClient();
-    // }
-
-
+    /* GETTERS & SETTERS */
     public boolean isMusicBefore() {
         return this.musicBefore;
     }
@@ -123,8 +104,6 @@ public class TestClient {
     public void setSensorCovered(boolean sensorCovered) {
         this.sensorCovered = sensorCovered;
     }
-
-
     
     public String getMessageToArduino() {
         return messageToArduino;
@@ -193,5 +172,4 @@ public class TestClient {
     public void setController(GameController controller) {
         this.controller = controller;
     }
-
 }

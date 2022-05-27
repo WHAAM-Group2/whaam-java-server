@@ -65,7 +65,7 @@ public class Music extends Thread {
                     musicOn = true;
                 }
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                // e.printStackTrace();
             }
         }
     }

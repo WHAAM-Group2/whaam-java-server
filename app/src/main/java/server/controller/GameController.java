@@ -13,7 +13,7 @@ import org.opencv.highgui.HighGui;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.videoio.VideoCapture;
 
-import javaserver.ArduinoHandler;
+import server.App;
 import server.model.Game;
 import server.model.Music;
 import server.model.Status;
@@ -49,7 +49,7 @@ public class GameController implements PropertyChangeListener {
 
         processor = new DeepNeuralNetworkProcessor();
 
-        camera = new VideoCapture(0);
+        camera = new VideoCapture(App.cameraPort);
         player = new Person("Player");
 
         try {
@@ -127,7 +127,7 @@ public class GameController implements PropertyChangeListener {
                     1, new Scalar(0, 0, 255));
 
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
         }
 
         HighGui.imshow("BUTCH EYES", frame);
@@ -147,6 +147,7 @@ public class GameController implements PropertyChangeListener {
         // If the time actually is time over 0, it will register as normal.
         // Else, it will automatically assign it a number so large, it will never make
         // the highscore.
+        
         if (l != 0) {
             mongo.endGame(username, l);
         } else {
